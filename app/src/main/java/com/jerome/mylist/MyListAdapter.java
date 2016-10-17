@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyListAdapter extends BaseAdapter {
-    List<String> myList = new ArrayList<>();
+    List<FlickrPhoto> myList = new ArrayList<>();
     Context mContext;
     private String MY_API_KEY = "2ef592bfddc86f508550184ec706a2fc";
 
@@ -45,18 +45,8 @@ public class MyListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setList(List<String> aList) {
+    public void setList(List<FlickrPhoto> aList) {
         myList = aList;
         notifyDataSetChanged();
-    }
-
-    public String getSearchURL(String query) {
-        return "https://www.flickr.com/services/rest/?method=flickr.photos.search" +
-                "&tags=" + query + "&safe_search=1&per_page=5&format=json&nojsoncallback=1" +
-                "&api_key=" + MY_API_KEY;
-    }
-
-    public String getImageURL(String farm, String server, String id, String secret) {
-        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
     }
 }

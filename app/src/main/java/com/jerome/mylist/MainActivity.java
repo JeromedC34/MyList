@@ -16,7 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnResponseListener {
     public EditText editText;
     MyListAdapter myListAdapter;
     boolean bound = false;
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             BoundService.ServiceBinder binder = (BoundService.ServiceBinder) service;
             boundService = binder.getService();
             bound = true;
+            boundService.setListener(MainActivity.this);
         }
 
         @Override
@@ -48,18 +49,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button changeButton = (Button) findViewById(R.id.btn_change);
         changeButton.setOnClickListener(this);
     }
-
     public void onClick(View view) {
-        List<String> myArrayList = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            myArrayList.add("Line " + (i + 1) + " - " + Math.random());
-        }
-        myListAdapter.setList(myArrayList);
+//        List<String> myArrayList = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            myArrayList.add("Line " + (i + 1) + " - " + Math.random());
+//        }
+//        myListAdapter.setList(myArrayList);
         if (bound) {
-            boundService.makeToast(this, myListAdapter.getSearchURL(editText.getText().toString()));
+            boundService.getPhotos(editText.getText().toString());
         } else {
             Toast.makeText(this, getResources().getString(R.string.not_binded), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void setPhotosList(List<FlickrPhoto> myList) {
+        myListAdapter.setList(myList);
     }
 
     @Override
@@ -76,5 +80,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             unbindService(connection);
             bound = false;
         }
+    }
+
+    @Override
+    public void onResponse(List<FlickrPhoto> list) {
+        myListAdapter.setList(list);
     }
 }
