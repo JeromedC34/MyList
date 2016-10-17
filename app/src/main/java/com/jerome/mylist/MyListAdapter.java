@@ -13,6 +13,7 @@ import java.util.List;
 public class MyListAdapter extends BaseAdapter {
     List<String> myList = new ArrayList<>();
     Context mContext;
+    private String MY_API_KEY = "2ef592bfddc86f508550184ec706a2fc";
 
     public MyListAdapter(Context context) {
         mContext = context;
@@ -47,5 +48,15 @@ public class MyListAdapter extends BaseAdapter {
     public void setList(List<String> aList) {
         myList = aList;
         notifyDataSetChanged();
+    }
+
+    public String getSearchURL(String query) {
+        return "https://www.flickr.com/services/rest/?method=flickr.photos.search" +
+                "&tags=" + query + "&safe_search=1&per_page=5&format=json&nojsoncallback=1" +
+                "&api_key=" + MY_API_KEY;
+    }
+
+    public String getImageURL(String farm, String server, String id, String secret) {
+        return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
     }
 }
