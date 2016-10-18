@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnResponseListener {
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             BoundService.ServiceBinder binder = (BoundService.ServiceBinder) service;
             boundService = binder.getService();
             bound = true;
-            boundService.setListener(MainActivity.this);
+            boundService.setOnResponseListener(MainActivity.this);
         }
 
         @Override

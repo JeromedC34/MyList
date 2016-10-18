@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.TabHost;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,10 +22,10 @@ public class BoundService extends Service {
     private final IBinder binder = new ServiceBinder();
     private Context context;
     private FlickrService service;
-    private OnResponseListener listener;
+    private OnResponseListener onResponseListener;
 
-    public void setListener(OnResponseListener listener) {
-        this.listener = listener;
+    public void setOnResponseListener(OnResponseListener onResponseListener) {
+        this.onResponseListener = onResponseListener;
     }
 
     @Nullable
@@ -68,7 +67,7 @@ public class BoundService extends Service {
                                         photo.get(i).getSecret()));
                         listFlickrPhoto.add(flickrPhoto);
                     }
-                    listener.onResponse(listFlickrPhoto);
+                    onResponseListener.onResponse(listFlickrPhoto);
                 } else {
                     Log.e("GET_error", "error / onResponse / enqueue");
                 }
