@@ -7,7 +7,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +36,6 @@ public class BoundService extends Service {
                 .build();
         service = retrofit.create(FlickrService.class);
         return binder;
-    }
-
-    public void makeToast(Context context, String string) {
-        Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
     }
 
     public String getImageURL(String farm, String server, String id, String secret) {

@@ -6,16 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyListAdapter extends BaseAdapter implements View.OnClickListener {
+public class MyListAdapter extends BaseAdapter {
     List<FlickrPhoto> myList = new ArrayList<>();
     Context context;
     private String MY_API_KEY = "2ef592bfddc86f508550184ec706a2fc";
@@ -55,20 +53,11 @@ public class MyListAdapter extends BaseAdapter implements View.OnClickListener {
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
                 .into(imageView);
-        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.my_line);
-        linearLayout.setOnClickListener(this);
-        linearLayout.setTag(position);
         return convertView;
     }
 
     public void setList(List<FlickrPhoto> aList) {
         myList = aList;
         notifyDataSetChanged();
-    }
-
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(context, "Id: " + v.getTag(), Toast.LENGTH_SHORT).show();
-//        ImageView imageView = (ImageView) v.findViewWithTag("img" + v.getTag());
     }
 }
