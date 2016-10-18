@@ -41,7 +41,6 @@ public class BoundService extends Service {
 
     public void makeToast(Context context, String string) {
         Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
-
     }
 
     public String getImageURL(String farm, String server, String id, String secret) {

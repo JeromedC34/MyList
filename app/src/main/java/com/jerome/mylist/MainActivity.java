@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -48,21 +49,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button changeButton = (Button) findViewById(R.id.btn_change);
         changeButton.setOnClickListener(this);
     }
+
     public void onClick(View view) {
-//        List<String> myArrayList = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            myArrayList.add("Line " + (i + 1) + " - " + Math.random());
-//        }
-//        myListAdapter.setList(myArrayList);
         if (bound) {
             boundService.getPhotos(editText.getText().toString());
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         } else {
             Toast.makeText(this, getResources().getString(R.string.not_binded), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void setPhotosList(List<FlickrPhoto> myList) {
-        myListAdapter.setList(myList);
     }
 
     @Override

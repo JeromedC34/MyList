@@ -16,4 +16,12 @@ public class FlickrPhoto {
                 ", url='" + url + '\'' +
                 '}';
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 }
