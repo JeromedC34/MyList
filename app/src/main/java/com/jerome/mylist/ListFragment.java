@@ -21,6 +21,7 @@ import java.util.List;
 
 public class ListFragment extends Fragment implements View.OnClickListener, OnResponseListener {
     public EditText editText;
+    ItemClicked mCallback;
     MyListAdapter myListAdapter;
     boolean bound = false;
     private MainActivity mainActivity;
@@ -41,6 +42,26 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     };
 
     @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (ItemClicked) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement ItemClicked");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        mCallback = null; // => avoid leaking, thanks @Deepscorn
+        super.onDetach();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -55,15 +76,17 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "Test - " + myListAdapter.getItem(position).getUrl() + " - " + position + " - " + id, Toast.LENGTH_SHORT).show();
                 View detailsFrame = getActivity().findViewById(R.id.fragmentPhoto);
+                String title = myListAdapter.getItem(position).getTitle();
+                String url = myListAdapter.getItem(position).getUrl();
                 // both fragments displayed
                 if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
+                    mCallback.sendItem(myListAdapter.getItem(position));
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), PhotoActivity.class);
-                    intent.putExtra("title", myListAdapter.getItem(position).getTitle());
-                    intent.putExtra("url", myListAdapter.getItem(position).getUrl());
+                    intent.putExtra("title", title);
+                    intent.putExtra("url", url);
                     startActivity(intent);
                 }
             }
@@ -104,5 +127,9 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public void onResponse(List<FlickrPhoto> list) {
         myListAdapter.setList(list);
+    }
+
+    public interface ItemClicked {
+        void sendItem(FlickrPhoto photo);
     }
 }
