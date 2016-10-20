@@ -15,4 +15,5 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
         PhotoFragment frag = (PhotoFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragmentPhoto);
         frag.setPhoto(findViewById(android.R.id.content), photo);
-    }}
+    }
+}
