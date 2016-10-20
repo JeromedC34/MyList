@@ -51,12 +51,14 @@ public class PhotoFragment extends Fragment {
 
     public void setPhoto(View view, FlickrPhoto photo) {
         flickrPhoto = photo;
-        textView = (TextView) view.findViewById(R.id.photo_title);
-        textView.setText(photo.getTitle());
-        imageView = (ImageView) view.findViewById(R.id.photo_img);
-        Picasso.with(getContext())
-                .load(photo.getUrl())
-                .placeholder(R.mipmap.ic_launcher)
-                .into(imageView);
+        if (!"".equals(flickrPhoto.getUrl())) {
+            textView = (TextView) view.findViewById(R.id.photo_title);
+            textView.setText(photo.getTitle());
+            imageView = (ImageView) view.findViewById(R.id.photo_img);
+            Picasso.with(getContext())
+                    .load(photo.getUrl())
+                    .placeholder(R.mipmap.ic_launcher)
+                    .into(imageView);
+        }
     }
 }
