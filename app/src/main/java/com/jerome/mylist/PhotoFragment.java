@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 public class PhotoFragment extends Fragment {
-    private static FlickrPhoto flickrPhoto;
+    private static FlickrPhoto flickrPhoto = new FlickrPhoto();
     private TextView textView;
     private ImageView imageView;
 
@@ -20,27 +20,32 @@ public class PhotoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
         textView = (TextView) view.findViewById(R.id.photo_title);
         imageView = (ImageView) view.findViewById(R.id.photo_img);
-        String title = "";
-        String url = "";
+        String lTitle = "";
+        String lUrl = "";
         if (savedInstanceState != null) {
             // value can be restored after Fragment is restored
-            title = savedInstanceState.getString("title");
-            url = savedInstanceState.getString("url");
+            lTitle = savedInstanceState.getString("title");
+            lUrl = savedInstanceState.getString("url");
         } else if (getArguments() != null) {
             // value is set by Fragment arguments
-            title = getArguments().getString("title");
-            url = getArguments().getString("url");
+            lTitle = getArguments().getString("title");
+            lUrl = getArguments().getString("url");
         } else if (getActivity() != null && getActivity().getIntent() != null) {
             // value is read from activity intent
-            title = getActivity().getIntent().getStringExtra("title");
-            url = getActivity().getIntent().getStringExtra("url");
+            lTitle = getActivity().getIntent().getStringExtra("title");
+            lUrl = getActivity().getIntent().getStringExtra("url");
         } else {
             if (flickrPhoto != null) {
-                title = flickrPhoto.getTitle();
-                url = flickrPhoto.getUrl();
+                lTitle = flickrPhoto.getTitle();
+                lUrl = flickrPhoto.getUrl();
             }
         }
-        setPhoto(view, new FlickrPhoto(title, url));
+        // if we've gotten something then we use it
+        if ((!"".equals(lTitle) && lTitle != null) || (!"".equals(lUrl) && lUrl != null)) {
+            flickrPhoto.setTitle(lTitle);
+            flickrPhoto.setUrl(lUrl);
+        }
+        setPhoto(view, flickrPhoto);
         return view;
     }
 
