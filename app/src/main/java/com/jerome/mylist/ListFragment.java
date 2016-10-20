@@ -20,11 +20,11 @@ import android.widget.Toast;
 import java.util.List;
 
 public class ListFragment extends Fragment implements View.OnClickListener, OnResponseListener {
-    public EditText editText;
-    ItemClicked mCallback;
-    MyListAdapter myListAdapter;
-    boolean bound = false;
-    private MainActivity mainActivity;
+    private EditText editText;
+    private ItemClicked mCallback;
+    private ListView listView;
+    private MyListAdapter myListAdapter;
+    private boolean bound = false;
     private BoundService boundService;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -69,8 +69,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-
-        ListView listView = (ListView) view.findViewById(R.id.list);
+        listView = (ListView) view.findViewById(R.id.list);
         myListAdapter = new MyListAdapter(getActivity());
         listView.setAdapter(myListAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

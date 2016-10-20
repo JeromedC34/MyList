@@ -13,12 +13,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyListAdapter extends BaseAdapter {
-    List<FlickrPhoto> myList = new ArrayList<>();
-    Context context;
+class MyListAdapter extends BaseAdapter {
+    private static List<FlickrPhoto> myList = new ArrayList<>();
+    private Context context;
     private String MY_API_KEY = "2ef592bfddc86f508550184ec706a2fc";
 
-    public MyListAdapter(Context context) {
+    MyListAdapter(Context context) {
         this.context = context;
     }
 
@@ -56,7 +56,7 @@ public class MyListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setList(List<FlickrPhoto> aList) {
+    void setList(List<FlickrPhoto> aList) {
         myList = aList;
         notifyDataSetChanged();
     }
