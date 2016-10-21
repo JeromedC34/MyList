@@ -20,21 +20,19 @@ import android.widget.Toast;
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 import org.honorato.multistatetogglebutton.ToggleButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListFragment extends Fragment implements View.OnClickListener, OnResponseListener {
     private static MyListAdapter myListAdapter;
     private static MyListAdapter myHistoryAdapter;
     private static MultiStateToggleButton mstButton;
-    private static List<FlickrPhoto> historyFlickrPhotoClicked = new ArrayList<>();
     private EditText editText;
     private ItemClicked mCallback;
     private ListView listView;
     private ListView historyView;
     private boolean bound = false;
     private BoundService boundService;
-    ;
+
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
