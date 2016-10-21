@@ -179,6 +179,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public void onResponse(List<FlickrPhoto> list) {
         myListAdapter.setList(list);
+        if (list.size() == 0) {
+            Toast.makeText(getActivity(), R.string.no_result, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onFailure() {
+        Toast.makeText(getActivity(), R.string.request_failure, Toast.LENGTH_LONG).show();
     }
 
     public interface ItemClicked {

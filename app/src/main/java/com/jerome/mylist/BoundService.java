@@ -66,7 +66,7 @@ public class BoundService extends Service {
 
             @Override
             public void onFailure(Call<FlickrPhotosResponse> call, Throwable t) {
-// Do Something
+                onResponseListener.onFailure();
             }
         });
     }

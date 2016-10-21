@@ -3,6 +3,8 @@
     <string name="btn_change">Change</string>
     <string name="inp_search">Search</string>
     <string name="not_binded">Not binded yet!</string>
+    <string name="no_result">No result found!</string>
+    <string name="request_failure">Network connection problem!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
