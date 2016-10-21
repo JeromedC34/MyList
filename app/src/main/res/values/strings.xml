@@ -6,10 +6,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string-array name="planets_array">
-        <item>Mer</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
+    <string-array name="search_toggles">
+        <item>Results</item>
+        <item>History</item>
     </string-array>
 </resources>

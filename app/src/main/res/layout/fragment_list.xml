@@ -25,16 +25,26 @@
 
     <org.honorato.multistatetogglebutton.MultiStateToggleButton
         android:id="@+id/mstb_multi_id"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         mstb:mstbPrimaryColor="@color/colorPrimary"
         mstb:mstbSecondaryColor="@color/colorPrimaryDark"
-        mstb:values="@array/planets_array" />
+        mstb:values="@array/search_toggles" />
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:visibility="visible"
+        />
+
+    <ListView
+        android:id="@+id/history"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        />
 </LinearLayout>

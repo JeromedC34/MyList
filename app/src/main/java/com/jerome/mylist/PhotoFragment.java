@@ -1,5 +1,7 @@
 package com.jerome.mylist;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,22 +24,28 @@ public class PhotoFragment extends Fragment {
         imageView = (ImageView) view.findViewById(R.id.photo_img);
         String lTitle = "";
         String lUrl = "";
-        if (savedInstanceState != null) {
-            // value can be restored after Fragment is restored
-            lTitle = savedInstanceState.getString("title");
-            lUrl = savedInstanceState.getString("url");
-        } else if (getArguments() != null) {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
             // value is set by Fragment arguments
-            lTitle = getArguments().getString("title");
-            lUrl = getArguments().getString("url");
-        } else if (getActivity() != null && getActivity().getIntent() != null) {
-            // value is read from activity intent
-            lTitle = getActivity().getIntent().getStringExtra("title");
-            lUrl = getActivity().getIntent().getStringExtra("url");
+            lTitle = bundle.getString("title");
+            lUrl = bundle.getString("url");
         } else {
-            if (flickrPhoto != null) {
+            Activity activity = getActivity();
+            Intent intent = null;
+            if (activity != null) {
+                intent = activity.getIntent();
+            }
+            if (activity != null && intent != null) {
+                // value is read from activity intent
+                lTitle = intent.getStringExtra("title");
+                lUrl = intent.getStringExtra("url");
+            } else if (flickrPhoto != null) {
                 lTitle = flickrPhoto.getTitle();
                 lUrl = flickrPhoto.getUrl();
+            } else if (savedInstanceState != null) {
+                // value can be restored after Fragment is restored
+                lTitle = savedInstanceState.getString("title");
+                lUrl = savedInstanceState.getString("url");
             }
         }
         // if we've gotten something then we use it

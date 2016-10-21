@@ -50,3 +50,6 @@ captures/
 
 # Keystore files
 *.jks
+
+# Mine
+app/src/main/res/values/strings_privates.xml

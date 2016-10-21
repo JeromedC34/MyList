@@ -14,12 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 class MyListAdapter extends BaseAdapter {
-    private static List<FlickrPhoto> myList = new ArrayList<>();
+    private List<FlickrPhoto> myList = new ArrayList<>();
     private Context context;
-    private String MY_API_KEY = "2ef592bfddc86f508550184ec706a2fc";
+    private String MY_API_KEY = "";
 
     MyListAdapter(Context context) {
         this.context = context;
+        MY_API_KEY = context.getResources().getString(R.string.flickr_api_key);
     }
 
     @Override
@@ -60,4 +61,17 @@ class MyListAdapter extends BaseAdapter {
         myList = aList;
         notifyDataSetChanged();
     }
+    void addItem(FlickrPhoto newItem) {
+        boolean found = false;
+        for (FlickrPhoto anItem: myList) {
+            if (newItem.getUrl().equals(anItem.getUrl())) {
+                found = true;
+            }
+        }
+        if (!found) {
+            myList.add(newItem);
+        }
+        notifyDataSetChanged();
+    }
+
 }
