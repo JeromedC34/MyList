@@ -1,7 +1,6 @@
 package com.jerome.mylist;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -19,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BoundService extends Service {
     private final IBinder binder = new ServiceBinder();
-    private Context context;
     private FlickrService service;
     private OnResponseListener onResponseListener;
 
@@ -48,12 +46,11 @@ public class BoundService extends Service {
             @Override
             public void
             onResponse(Call<FlickrPhotosResponse> call, Response<FlickrPhotosResponse> response) {
-                int statusCode = response.code();
                 if (response.isSuccessful()) {
                     FlickrPhoto flickrPhoto;
                     List<FlickrPhotosResponse.Photos.Photo> photo = response.body().getPhotos().getPhoto();
-                    List <FlickrPhoto> listFlickrPhoto = new ArrayList<>();
-                    for(int i = 0; i < photo.size(); i++) {
+                    List<FlickrPhoto> listFlickrPhoto = new ArrayList<>();
+                    for (int i = 0; i < photo.size(); i++) {
                         flickrPhoto = new FlickrPhoto(photo.get(i).getTitle(),
                                 getImageURL(photo.get(i).getFarm(),
                                         photo.get(i).getServer(),
