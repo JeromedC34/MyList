@@ -30,11 +30,11 @@ public class FlickrPhotoPersistenceManager {
                 .queryList();
     }
 
-    public void save(FlickrPhoto dog) {
+    public void save(FlickrPhoto photo) {
         try {
-            List<FlickrPhoto> testExists = getFlickrPhotoByUrl(dog.getUrl());
+            List<FlickrPhoto> testExists = getFlickrPhotoByUrl(photo.getUrl());
             if (testExists.size() == 0) {
-                dog.save();
+                photo.save();
             }
         } catch (Exception e) {
             Log.w("SaveFlickrPhoto", e.toString());
