@@ -25,13 +25,9 @@ public class PhotoFragment extends Fragment {
         textView = (TextView) view.findViewById(R.id.photo_title);
         imageView = (ImageView) view.findViewById(R.id.photo_img);
         imageButton = (ImageButton) view.findViewById(R.id.photo_favorite);
-        String lTitle = "";
-        String lUrl = "";
         Bundle bundle = getArguments();
         if (bundle != null) {
             // value is set by Fragment arguments
-            lTitle = bundle.getString("title");
-            lUrl = bundle.getString("url");
             flickrPhoto = (FlickrPhoto) bundle.getSerializable("photo");
         } else {
             Activity activity = getActivity();
@@ -41,23 +37,13 @@ public class PhotoFragment extends Fragment {
             }
             if (activity != null && intent != null) {
                 // value is read from activity intent
-                lTitle = intent.getStringExtra("title");
-                lUrl = intent.getStringExtra("url");
                 flickrPhoto = (FlickrPhoto) intent.getSerializableExtra("photo");
             } else if (flickrPhoto != null) {
-                lTitle = flickrPhoto.getTitle();
-                lUrl = flickrPhoto.getUrl();
+                // nothing to do, object already existing/set
             } else if (savedInstanceState != null) {
                 // value can be restored after Fragment is restored
-                lTitle = savedInstanceState.getString("title");
-                lUrl = savedInstanceState.getString("url");
                 flickrPhoto = (FlickrPhoto) savedInstanceState.getSerializable("photo");
             }
-        }
-        // if we've gotten something then we use it
-        if ((!"".equals(lTitle) && lTitle != null) || (!"".equals(lUrl) && lUrl != null)) {
-            flickrPhoto.setTitle(lTitle);
-            flickrPhoto.setUrl(lUrl);
         }
         setPhoto(view, flickrPhoto);
         return view;

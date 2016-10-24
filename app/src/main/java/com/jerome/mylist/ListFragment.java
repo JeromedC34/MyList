@@ -91,8 +91,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 View detailsFrame = getActivity().findViewById(R.id.fragmentPhoto);
-                String title = myListAdapter.getItem(position).getTitle();
-                String url = myListAdapter.getItem(position).getUrl();
                 FlickrPhoto myPhoto;
                 // both fragments displayed
                 if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
@@ -103,9 +101,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), PhotoActivity.class);
-                    intent.putExtra("title", title);
-                    intent.putExtra("url", url);
-                    myPhoto = new FlickrPhoto(title, url);
+                    myPhoto = myListAdapter.getItem(position);
                     intent.putExtra("photo", myPhoto);
                     myHistoryAdapter.addItem(myPhoto);
                     startActivity(intent);
@@ -117,16 +113,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 View detailsFrame = getActivity().findViewById(R.id.fragmentPhoto);
-                String title = myHistoryAdapter.getItem(position).getTitle();
-                String url = myHistoryAdapter.getItem(position).getUrl();
                 // both fragments displayed
                 if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
                     mCallback.sendItem(myHistoryAdapter.getItem(position));
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), PhotoActivity.class);
-                    intent.putExtra("title", title);
-                    intent.putExtra("url", url);
                     intent.putExtra("photo", myHistoryAdapter.getItem(position));
                     startActivity(intent);
                 }
