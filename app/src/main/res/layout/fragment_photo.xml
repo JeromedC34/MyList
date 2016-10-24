@@ -9,6 +9,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jerome.mylist.MainActivity">
 
+    <ImageButton
+        android:id="@+id/photo_favorite"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@color/colorControlNormal"
+        android:src="@android:drawable/btn_star_big_off" />
+
     <TextView
         android:id="@+id/photo_title"
         android:layout_width="match_parent"

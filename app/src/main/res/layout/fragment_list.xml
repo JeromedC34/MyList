@@ -9,42 +9,66 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="1"
     tools:context="com.jerome.mylist.MainActivity">
-
-    <EditText
-        android:id="@+id/inp_search"
-        android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:hint="@string/inp_search" />
-
-    <Button
-        android:id="@+id/btn_change"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_change" />
 
     <org.honorato.multistatetogglebutton.MultiStateToggleButton
         android:id="@+id/mstb_multi_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        mstb:mstbPrimaryColor="@color/colorPrimary"
+        mstb:mstbPrimaryColor="@color/colorControlNormal"
         mstb:mstbSecondaryColor="@color/colorPrimaryDark"
         mstb:values="@array/search_toggles" />
 
-    <ListView
-        android:id="@+id/list"
+    <LinearLayout
+        android:id="@+id/search_block"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="visible"
-        />
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@+id/inp_search"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:hint="@string/inp_search" />
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="visible" />
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/history"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/favorites"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
+
 </LinearLayout>

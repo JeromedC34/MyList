@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyList</string>
+    <string name="app_name">My-List</string>
     <string name="btn_change">Change</string>
     <string name="inp_search">Search</string>
     <string name="not_binded">Not binded yet!</string>
@@ -11,5 +11,8 @@
     <string-array name="search_toggles">
         <item>Results</item>
         <item>History</item>
+        <item>Favorites</item>
+        <item>Map</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>

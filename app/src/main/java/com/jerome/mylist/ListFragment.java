@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,11 +26,12 @@ import java.util.List;
 public class ListFragment extends Fragment implements View.OnClickListener, OnResponseListener {
     private static MyListAdapter myListAdapter;
     private static MyListAdapter myHistoryAdapter;
-    private static MultiStateToggleButton mstButton;
+    private static LinearLayout searchBlock;
+    private static ListView historyView;
+    private MultiStateToggleButton mstButton;
     private EditText editText;
     private ItemClicked mCallback;
-    private ListView listView;
-    private ListView historyView;
+    private FlickrPhotoPersistenceManager flickrPhotoPersistenceManager;
     private boolean bound = false;
     private BoundService boundService;
 
@@ -76,10 +78,13 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        listView = (ListView) view.findViewById(R.id.list);
+        ListView listView = (ListView) view.findViewById(R.id.list);
+        searchBlock = (LinearLayout) view.findViewById(R.id.search_block);
         historyView = (ListView) view.findViewById(R.id.history);
         myListAdapter = new MyListAdapter(getActivity());
         myHistoryAdapter = new MyListAdapter(getActivity());
+        flickrPhotoPersistenceManager = new FlickrPhotoPersistenceManager(getActivity());
+        myHistoryAdapter.setList(flickrPhotoPersistenceManager.getFlickrPhotoHistory());
         listView.setAdapter(myListAdapter);
         historyView.setAdapter(myHistoryAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,17 +93,23 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
                 View detailsFrame = getActivity().findViewById(R.id.fragmentPhoto);
                 String title = myListAdapter.getItem(position).getTitle();
                 String url = myListAdapter.getItem(position).getUrl();
+                FlickrPhoto myPhoto;
                 // both fragments displayed
                 if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
-                    mCallback.sendItem(myListAdapter.getItem(position));
-                    myHistoryAdapter.addItem(myListAdapter.getItem(position));
+                    myPhoto = myListAdapter.getItem(position);
+                    mCallback.sendItem(myPhoto);
+                    myHistoryAdapter.addItem(myPhoto);
+                    flickrPhotoPersistenceManager.save(myPhoto);
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), PhotoActivity.class);
                     intent.putExtra("title", title);
                     intent.putExtra("url", url);
-                    myHistoryAdapter.addItem(new FlickrPhoto(title, url));
+                    myPhoto = new FlickrPhoto(title, url);
+                    intent.putExtra("photo", myPhoto);
+                    myHistoryAdapter.addItem(myPhoto);
                     startActivity(intent);
+                    flickrPhotoPersistenceManager.save(myPhoto);
                 }
             }
         });
@@ -116,45 +127,33 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
                     intent.setClass(getActivity(), PhotoActivity.class);
                     intent.putExtra("title", title);
                     intent.putExtra("url", url);
+                    intent.putExtra("photo", myHistoryAdapter.getItem(position));
                     startActivity(intent);
                 }
             }
         });
         editText = (EditText) view.findViewById(R.id.inp_search);
 
-        Button changeButton = (Button) view.findViewById(R.id.btn_change);
-        changeButton.setOnClickListener(this);
-        if (mstButton == null) {
-            mstButton = (MultiStateToggleButton) view.findViewById(R.id.mstb_multi_id);
-            initLists();
-        }
-        mstButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
-            @Override
-            public void onValueChanged(int position) {
-                if (position == 0) {
-                    historyView.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
-                } else {
-                    listView.setVisibility(View.GONE);
-                    historyView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        Button searchButton = (Button) view.findViewById(R.id.btn_search);
+        searchButton.setOnClickListener(this);
+
         return view;
     }
 
     private void initLists() {
         mstButton.setValue(0);
         historyView.setVisibility(View.GONE);
-        listView.setVisibility(View.VISIBLE);
+        searchBlock.setVisibility(View.VISIBLE);
     }
 
     public void onClick(View view) {
         if (bound) {
-            initLists();
-            boundService.getPhotos(editText.getText().toString());
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (!"".equals(editText.getText().toString())) {
+                initLists();
+                boundService.getPhotos(editText.getText().toString());
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         } else {
             Toast.makeText(getActivity(), getResources().getString(R.string.not_binded), Toast.LENGTH_SHORT).show();
         }
@@ -165,6 +164,30 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
         super.onStart();
         Intent intent = new Intent(getActivity(), BoundService.class);
         getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        if (mstButton == null) {
+            mstButton = (MultiStateToggleButton) getActivity().findViewById(R.id.mstb_multi_id);
+            initLists();
+        }
+        mstButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int position) {
+                if (position == 0) {
+                    historyView.setVisibility(View.GONE);
+                    searchBlock.setVisibility(View.VISIBLE);
+                } else if (position == 1) {
+                    searchBlock.setVisibility(View.GONE);
+                    historyView.setVisibility(View.VISIBLE);
+                } else if (position == 2) {
+                    historyView.setVisibility(View.GONE);
+                    searchBlock.setVisibility(View.GONE);
+                } else {
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), MapsActivity.class);
+                    startActivity(intent);
+                    mstButton.setValue(0);
+                }
+            }
+        });
     }
 
     @Override

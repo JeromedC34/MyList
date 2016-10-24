@@ -9,8 +9,9 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
     @Override
-    public void sendItem(FlickrPhoto photo){
+    public void sendItem(FlickrPhoto photo) {
         // Get Fragment B
         PhotoFragment frag = (PhotoFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragmentPhoto);
