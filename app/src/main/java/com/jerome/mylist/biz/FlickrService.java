@@ -1,4 +1,6 @@
-package com.jerome.mylist;
+package com.jerome.mylist.biz;
+
+import com.jerome.mylist.mod.FlickrPhotosResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

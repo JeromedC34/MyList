@@ -1,4 +1,6 @@
-package com.jerome.mylist;
+package com.jerome.mylist.biz;
+
+import com.jerome.mylist.dat.FlickrPhoto;
 
 import java.util.List;
 

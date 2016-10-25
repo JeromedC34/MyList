@@ -1,4 +1,4 @@
-package com.jerome.mylist;
+package com.jerome.mylist.biz;
 
 import android.app.Service;
 import android.content.Intent;
@@ -6,6 +6,9 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.jerome.mylist.mod.FlickrPhotosResponse;
+import com.jerome.mylist.dat.FlickrPhoto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +43,13 @@ public class BoundService extends Service {
         return "https://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
     }
 
-    public void getPhotos(String query) {
+    public void getPhotos(final String query) {
         Call<FlickrPhotosResponse> flickrPhotosResponseCall = service.getPhotos(query);
         flickrPhotosResponseCall.enqueue(new Callback<FlickrPhotosResponse>() {
             @Override
             public void
             onResponse(Call<FlickrPhotosResponse> call, Response<FlickrPhotosResponse> response) {
+                String query1 = call.request().url().queryParameter("query");
                 if (response.isSuccessful()) {
                     FlickrPhoto flickrPhoto;
                     List<FlickrPhotosResponse.Photos.Photo> photo = response.body().getPhotos().getPhoto();
@@ -55,7 +59,8 @@ public class BoundService extends Service {
                                 getImageURL(photo.get(i).getFarm(),
                                         photo.get(i).getServer(),
                                         photo.get(i).getId(),
-                                        photo.get(i).getSecret()));
+                                        photo.get(i).getSecret()),
+                                query);
                         listFlickrPhoto.add(flickrPhoto);
                     }
                     onResponseListener.onResponse(listFlickrPhoto);
@@ -72,7 +77,7 @@ public class BoundService extends Service {
     }
 
     public class ServiceBinder extends Binder {
-        BoundService getService() {
+        public BoundService getService() {
             return BoundService.this;
         }
     }

@@ -1,9 +1,9 @@
-package com.jerome.mylist;
-
+package com.jerome.mylist.dat;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.jerome.mylist.mod.FlickrPhotoType;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -19,23 +19,46 @@ public class FlickrPhotoPersistenceManager {
     public List<FlickrPhoto> getFlickrPhotoByUrl(String string) {
         return SQLite.select()
                 .from(FlickrPhoto.class)
-                .where(FlickrPhoto_Table.url.like(string + "%"))
-                .or(FlickrPhoto_Table.url.like("%" + string + "%"))
+                .where(FlickrPhoto_Table.url.eq(string))
                 .queryList();
     }
 
-    public List<FlickrPhoto> getFlickrPhotoHistory() {
+    public List<FlickrPhoto> readAll() {
         return SQLite.select()
                 .from(FlickrPhoto.class)
                 .queryList();
     }
 
+    public List<FlickrPhoto> readHistory() {
+        return SQLite.select()
+                .from(FlickrPhoto.class)
+                .orderBy(FlickrPhoto_Table.id, false)
+                .queryList();
+    }
+
+    public List<FlickrPhoto> readFavorites() {
+        return SQLite.select()
+                .from(FlickrPhoto.class)
+                .where(FlickrPhoto_Table.type.eq(FlickrPhotoType.FAVORITE))
+                .orderBy(FlickrPhoto_Table.count, false)
+                .queryList();
+    }
+
+    public void update(FlickrPhoto photo) {
+        save(photo);
+    }
+
+    public void delete(FlickrPhoto photo) {
+        photo.delete();
+    }
+
+    public void read() {
+        // TODO
+    }
+
     public void save(FlickrPhoto photo) {
         try {
-            List<FlickrPhoto> testExists = getFlickrPhotoByUrl(photo.getUrl());
-            if (testExists.size() == 0) {
-                photo.save();
-            }
+            photo.save();
         } catch (Exception e) {
             Log.w("SaveFlickrPhoto", e.toString());
         }

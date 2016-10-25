@@ -1,8 +1,10 @@
-package com.jerome.mylist;
+package com.jerome.mylist.dat;
 
+import com.jerome.mylist.mod.FlickrPhotoType;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.io.Serializable;
@@ -10,11 +12,9 @@ import java.io.Serializable;
 @Table(database = AppDatabase.class)
 public class FlickrPhoto extends BaseModel implements Serializable {
     @Column
-    @PrimaryKey(autoincrement = true)
-    private long id;
-    @Column
     String title;
     @Column
+    @Unique
     String url;
     @Column
     FlickrPhotoType type;
@@ -26,11 +26,14 @@ public class FlickrPhoto extends BaseModel implements Serializable {
     long lat;
     @Column
     long lon;
+    @Column
+    @PrimaryKey(autoincrement = true)
+    private long id;
 
     public FlickrPhoto() {
         title = "";
         url = "";
-        type = FlickrPhotoType.HISTORY;
+        type = FlickrPhotoType.DEFAULT;
         count = 0;
         search = "";
         lat = 0;
@@ -38,8 +41,19 @@ public class FlickrPhoto extends BaseModel implements Serializable {
     }
 
     public FlickrPhoto(String title, String url) {
+        this(title, url, "");
+    }
+
+    public FlickrPhoto(String title, String url, String search) {
         this.title = title;
         this.url = url;
+        this.type = FlickrPhotoType.HISTORY;
+        this.count = 0;
+        this.search = search;
+    }
+
+    public void seen() {
+        this.count++;
     }
 
     @Override
@@ -112,5 +126,9 @@ public class FlickrPhoto extends BaseModel implements Serializable {
 
     public void setLon(long lon) {
         this.lon = lon;
+    }
+
+    public boolean isFavorite() {
+        return type == FlickrPhotoType.FAVORITE;
     }
 }

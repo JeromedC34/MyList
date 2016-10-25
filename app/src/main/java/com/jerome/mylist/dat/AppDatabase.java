@@ -1,4 +1,4 @@
-package com.jerome.mylist;
+package com.jerome.mylist.dat;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 

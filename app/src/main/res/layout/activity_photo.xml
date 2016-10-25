@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jerome.mylist.PhotoActivity">
+    tools:context="com.jerome.mylist.ui.PhotoActivity">
 
     <fragment
         android:id="@+id/fragmentPhoto"
-        android:name="com.jerome.mylist.PhotoFragment"
+        android:name="com.jerome.mylist.ui.PhotoFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

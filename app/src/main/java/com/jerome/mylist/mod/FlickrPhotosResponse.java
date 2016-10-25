@@ -1,8 +1,8 @@
-package com.jerome.mylist;
+package com.jerome.mylist.mod;
 
 import java.util.List;
 
-class FlickrPhotosResponse {
+public class FlickrPhotosResponse {
     private Photos photos;
     private String stat;
 

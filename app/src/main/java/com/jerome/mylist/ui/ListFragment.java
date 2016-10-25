@@ -1,4 +1,4 @@
-package com.jerome.mylist;
+package com.jerome.mylist.ui;
 
 import android.app.Fragment;
 import android.content.ComponentName;
@@ -18,6 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.jerome.mylist.R;
+import com.jerome.mylist.biz.BoundService;
+import com.jerome.mylist.biz.MyPhotos;
+import com.jerome.mylist.biz.OnResponseListener;
+import com.jerome.mylist.dat.FlickrPhoto;
+
 import org.honorato.multistatetogglebutton.MultiStateToggleButton;
 import org.honorato.multistatetogglebutton.ToggleButton;
 
@@ -31,7 +37,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     private MultiStateToggleButton mstButton;
     private EditText editText;
     private ItemClicked mCallback;
-    private FlickrPhotoPersistenceManager flickrPhotoPersistenceManager;
+    private MyPhotos myPhotos;
     private boolean bound = false;
     private BoundService boundService;
 
@@ -83,8 +89,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
         historyView = (ListView) view.findViewById(R.id.history);
         myListAdapter = new MyListAdapter(getActivity());
         myHistoryAdapter = new MyListAdapter(getActivity());
-        flickrPhotoPersistenceManager = new FlickrPhotoPersistenceManager(getActivity());
-        myHistoryAdapter.setList(flickrPhotoPersistenceManager.getFlickrPhotoHistory());
+        myPhotos = new MyPhotos(getActivity());
         listView.setAdapter(myListAdapter);
         historyView.setAdapter(myHistoryAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,20 +97,17 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 View detailsFrame = getActivity().findViewById(R.id.fragmentPhoto);
                 FlickrPhoto myPhoto;
+                myPhoto = myListAdapter.getItem(position);
+                myPhoto = myPhotos.seen(myPhoto);
+//                myHistoryAdapter.addItem(myPhoto);
                 // both fragments displayed
                 if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
-                    myPhoto = myListAdapter.getItem(position);
                     mCallback.sendItem(myPhoto);
-                    myHistoryAdapter.addItem(myPhoto);
-                    flickrPhotoPersistenceManager.save(myPhoto);
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), PhotoActivity.class);
-                    myPhoto = myListAdapter.getItem(position);
                     intent.putExtra("photo", myPhoto);
-                    myHistoryAdapter.addItem(myPhoto);
                     startActivity(intent);
-                    flickrPhotoPersistenceManager.save(myPhoto);
                 }
             }
         });
@@ -113,13 +115,15 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 View detailsFrame = getActivity().findViewById(R.id.fragmentPhoto);
+                FlickrPhoto myPhoto = myHistoryAdapter.getItem(position);
+                myPhoto = myPhotos.seen(myPhoto);
                 // both fragments displayed
                 if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
-                    mCallback.sendItem(myHistoryAdapter.getItem(position));
+                    mCallback.sendItem(myPhoto);
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), PhotoActivity.class);
-                    intent.putExtra("photo", myHistoryAdapter.getItem(position));
+                    intent.putExtra("photo", myPhoto);
                     startActivity(intent);
                 }
             }
@@ -163,10 +167,12 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
         mstButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
             @Override
             public void onValueChanged(int position) {
+                // TODO avoid to change visibilities -> use fragments
                 if (position == 0) {
                     historyView.setVisibility(View.GONE);
                     searchBlock.setVisibility(View.VISIBLE);
                 } else if (position == 1) {
+                    myHistoryAdapter.setList(myPhotos.getHistory());
                     searchBlock.setVisibility(View.GONE);
                     historyView.setVisibility(View.VISIBLE);
                 } else if (position == 2) {

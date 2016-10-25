@@ -5,14 +5,14 @@
     android:weightSum="2"
     android:layout_height="match_parent">
     <fragment
-        android:name="com.jerome.mylist.ListFragment"
+        android:name="com.jerome.mylist.ui.ListFragment"
         android:id="@+id/fragmentList"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         />
     <fragment
-        android:name="com.jerome.mylist.PhotoFragment"
+        android:name="com.jerome.mylist.ui.PhotoFragment"
         android:id="@+id/fragmentPhoto"
         android:layout_width="0dp"
         android:layout_height="match_parent"

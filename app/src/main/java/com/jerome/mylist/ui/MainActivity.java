@@ -1,7 +1,10 @@
-package com.jerome.mylist;
+package com.jerome.mylist.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.jerome.mylist.dat.FlickrPhoto;
+import com.jerome.mylist.R;
 
 public class MainActivity extends AppCompatActivity implements ListFragment.ItemClicked {
     @Override

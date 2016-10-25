@@ -1,4 +1,4 @@
-package com.jerome.mylist;
+package com.jerome.mylist.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,20 +11,28 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jerome.mylist.biz.MyPhotos;
+import com.jerome.mylist.dat.FlickrPhoto;
+import com.jerome.mylist.mod.FlickrPhotoType;
+import com.jerome.mylist.R;
 import com.squareup.picasso.Picasso;
 
-public class PhotoFragment extends Fragment {
+public class PhotoFragment extends Fragment implements View.OnClickListener {
     private static FlickrPhoto flickrPhoto = new FlickrPhoto();
     private TextView textView;
     private ImageView imageView;
     private ImageButton imageButton;
+    private MyPhotos myPhotos;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
+        myPhotos = new MyPhotos(getContext());
         textView = (TextView) view.findViewById(R.id.photo_title);
         imageView = (ImageView) view.findViewById(R.id.photo_img);
         imageButton = (ImageButton) view.findViewById(R.id.photo_favorite);
+        imageButton.setOnClickListener(this);
+        myPhotos = new MyPhotos(getActivity());
         Bundle bundle = getArguments();
         if (bundle != null) {
             // value is set by Fragment arguments
@@ -45,21 +53,38 @@ public class PhotoFragment extends Fragment {
                 flickrPhoto = (FlickrPhoto) savedInstanceState.getSerializable("photo");
             }
         }
-        setPhoto(view, flickrPhoto);
+        setPhoto(view, null);
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        if (flickrPhoto.isFavorite()) {
+            imageButton.setImageResource(android.R.drawable.btn_star_big_off);
+        } else {
+            imageButton.setImageResource(android.R.drawable.btn_star_big_on);
+        }
+        flickrPhoto = myPhotos.toggleFavorite(flickrPhoto);
+    }
+
     public void setPhoto(View view, FlickrPhoto photo) {
-        flickrPhoto = photo;
+        if (photo != null) {
+            flickrPhoto = photo;
+        }
         if (flickrPhoto != null && !"".equals(flickrPhoto.getUrl())) {
+            if (flickrPhoto.isFavorite()) {
+                imageButton.setImageResource(android.R.drawable.btn_star_big_on);
+            } else {
+                imageButton.setImageResource(android.R.drawable.btn_star_big_off);
+            }
             textView = (TextView) view.findViewById(R.id.photo_title);
-            textView.setText(photo.getTitle());
+            textView.setText(flickrPhoto.getTitle());
             imageView = (ImageView) view.findViewById(R.id.photo_img);
             Picasso.with(getContext())
-                    .load(photo.getUrl())
+                    .load(flickrPhoto.getUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .into(imageView);
-            if (photo.getType() == FlickrPhotoType.FAVORITE) {
+            if (flickrPhoto.getType() == FlickrPhotoType.FAVORITE) {
                 imageButton.setImageResource(android.R.drawable.btn_star_big_on);
             }
         }

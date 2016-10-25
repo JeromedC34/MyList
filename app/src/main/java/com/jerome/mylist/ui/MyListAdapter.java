@@ -1,4 +1,4 @@
-package com.jerome.mylist;
+package com.jerome.mylist.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jerome.mylist.dat.FlickrPhoto;
+import com.jerome.mylist.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ class MyListAdapter extends BaseAdapter {
                     .inflate(R.layout.row_layout, parent, false);
         }
         TextView textView = (TextView) convertView.findViewById(R.id.text);
-        textView.setText(getItem(position).getTitle());
+        textView.setText(getItem(position).getId() + " - " + getItem(position).getCount() + " - " + getItem(position).getType() + " - " + getItem(position).getSearch() + " - " + getItem(position).getTitle());
         ImageView imageView = (ImageView) convertView.findViewById(R.id.img);
         imageView.setTag("img_" + position);
         Picasso.with(context)

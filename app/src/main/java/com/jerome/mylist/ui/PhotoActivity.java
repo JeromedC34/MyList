@@ -1,8 +1,10 @@
-package com.jerome.mylist;
+package com.jerome.mylist.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.jerome.mylist.R;
 
 public class PhotoActivity extends AppCompatActivity {
 
