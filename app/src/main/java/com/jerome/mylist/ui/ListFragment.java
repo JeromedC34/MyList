@@ -1,12 +1,12 @@
 package com.jerome.mylist.ui;
 
-import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.jerome.mylist.R;
 import com.jerome.mylist.biz.BoundService;
+import com.jerome.mylist.biz.GeoLoc;
 import com.jerome.mylist.biz.MyPhotos;
+import com.jerome.mylist.biz.OnGeoLocListener;
 import com.jerome.mylist.biz.OnResponseListener;
 import com.jerome.mylist.dat.FlickrPhoto;
 
@@ -29,7 +32,7 @@ import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.util.List;
 
-public class ListFragment extends Fragment implements View.OnClickListener, OnResponseListener {
+public class ListFragment extends Fragment implements View.OnClickListener, OnResponseListener, OnGeoLocListener {
     private static MyListAdapter myListAdapter;
     private static MyListAdapter myHistoryAdapter;
     private static LinearLayout searchBlock;
@@ -40,6 +43,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     private MyPhotos myPhotos;
     private boolean bound = false;
     private BoundService boundService;
+    private GeoLoc geoLoc;
+    private LatLng latLng;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -79,6 +84,10 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        geoLoc = new GeoLoc(this.getContext());
+        geoLoc.setOnGeoLocListener(this);
+        geoLoc.onCreate();
+        latLng = geoLoc.getLastLatLng();
     }
 
     @Override
@@ -98,6 +107,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
                 View detailsFrame = getActivity().findViewById(R.id.fragmentPhoto);
                 FlickrPhoto myPhoto;
                 myPhoto = myListAdapter.getItem(position);
+                myPhoto = myPhotos.setLatLng(myPhoto, geoLoc.getLastLatLng());
                 myPhoto = myPhotos.seen(myPhoto);
 //                myHistoryAdapter.addItem(myPhoto);
                 // both fragments displayed
@@ -158,6 +168,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public void onStart() {
         super.onStart();
+        geoLoc.onStart();
         Intent intent = new Intent(getActivity(), BoundService.class);
         getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
         if (mstButton == null) {
@@ -191,6 +202,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public void onStop() {
         super.onStop();
+        geoLoc.onStop();
         if (bound) {
             getActivity().unbindService(connection);
             bound = false;
@@ -208,6 +220,22 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
     @Override
     public void onFailure() {
         Toast.makeText(getActivity(), R.string.request_failure, Toast.LENGTH_LONG).show();
+    }
+
+    public void onGeoLocUpdate(LatLng newLatLng, String string) {
+        latLng = newLatLng;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        geoLoc.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        geoLoc.onResume();
     }
 
     public interface ItemClicked {

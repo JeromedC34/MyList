@@ -11,10 +11,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jerome.mylist.R;
 import com.jerome.mylist.biz.MyPhotos;
 import com.jerome.mylist.dat.FlickrPhoto;
-import com.jerome.mylist.mod.FlickrPhotoType;
-import com.jerome.mylist.R;
 import com.squareup.picasso.Picasso;
 
 public class PhotoFragment extends Fragment implements View.OnClickListener {
@@ -59,12 +58,8 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (flickrPhoto.isFavorite()) {
-            imageButton.setImageResource(android.R.drawable.btn_star_big_off);
-        } else {
-            imageButton.setImageResource(android.R.drawable.btn_star_big_on);
-        }
         flickrPhoto = myPhotos.toggleFavorite(flickrPhoto);
+        setFavImg(flickrPhoto);
     }
 
     public void setPhoto(View view, FlickrPhoto photo) {
@@ -72,21 +67,23 @@ public class PhotoFragment extends Fragment implements View.OnClickListener {
             flickrPhoto = photo;
         }
         if (flickrPhoto != null && !"".equals(flickrPhoto.getUrl())) {
-            if (flickrPhoto.isFavorite()) {
-                imageButton.setImageResource(android.R.drawable.btn_star_big_on);
-            } else {
-                imageButton.setImageResource(android.R.drawable.btn_star_big_off);
-            }
+            setFavImg(flickrPhoto);
             textView = (TextView) view.findViewById(R.id.photo_title);
             textView.setText(flickrPhoto.getTitle());
+            textView.setText(flickrPhoto.toString());
             imageView = (ImageView) view.findViewById(R.id.photo_img);
             Picasso.with(getContext())
                     .load(flickrPhoto.getUrl())
                     .placeholder(R.mipmap.ic_launcher)
                     .into(imageView);
-            if (flickrPhoto.getType() == FlickrPhotoType.FAVORITE) {
-                imageButton.setImageResource(android.R.drawable.btn_star_big_on);
-            }
+        }
+    }
+
+    public void setFavImg(FlickrPhoto photo) {
+        if (photo.isFavorite()) {
+            imageButton.setImageResource(android.R.drawable.btn_star_big_on);
+        } else {
+            imageButton.setImageResource(android.R.drawable.btn_star_big_off);
         }
     }
 }

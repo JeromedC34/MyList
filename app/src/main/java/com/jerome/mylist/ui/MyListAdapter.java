@@ -47,11 +47,12 @@ class MyListAdapter extends BaseAdapter {
                     .inflate(R.layout.row_layout, parent, false);
         }
         TextView textView = (TextView) convertView.findViewById(R.id.text);
-        textView.setText(getItem(position).getLat() + " - " + getItem(position).getLon() + " - " + getItem(position).getCount() + " - " + getItem(position).getType() + " - " + getItem(position).getSearch() + " - " + getItem(position).getTitle());
+        FlickrPhoto photo = getItem(position);
+        textView.setText(photo.toString());
         ImageView imageView = (ImageView) convertView.findViewById(R.id.img);
         imageView.setTag("img_" + position);
         Picasso.with(context)
-                .load(getItem(position).getUrl())
+                .load(photo.getUrl())
                 .resize(100, 100)
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher)
