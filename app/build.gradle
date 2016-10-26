@@ -36,7 +36,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'org.honorato.multistatetogglebutton:multistatetogglebutton:0.2.2'
-    compile 'com.google.android.gms:play-services:9.6.1'
+    compile 'com.google.android.gms:play-services-location:9.6.1'
+    compile 'com.google.android.gms:play-services-maps:9.6.1'
     testCompile 'junit:junit:4.12'
 
     apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
@@ -45,4 +46,5 @@ dependencies {
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
     // kotlin extensions
     compile "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflow_version}"
+
 }
