@@ -3,8 +3,8 @@ package com.jerome.mylist.ui;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.jerome.mylist.dat.FlickrPhoto;
 import com.jerome.mylist.R;
+import com.jerome.mylist.dat.FlickrPhoto;
 
 public class MainActivity extends AppCompatActivity implements ListFragment.ItemClicked {
     @Override
