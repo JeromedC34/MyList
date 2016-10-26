@@ -107,7 +107,7 @@ public class GeoLoc implements LocationListener, GoogleApiClient.OnConnectionFai
     @Override
     public void onLocationChanged(Location location) {
         setLastLocation(location);
-        Toast.makeText(context, "onLocationChanged: " + lastLocation.getLatitude() + ", " + lastLocation.getLongitude(), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "GeoLoc.onLocationChanged: " + lastLocation.getLatitude() + ", " + lastLocation.getLongitude(), Toast.LENGTH_LONG).show();
     }
 
     @Override

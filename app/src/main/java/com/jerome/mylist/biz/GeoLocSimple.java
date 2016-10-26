@@ -77,7 +77,7 @@ public class GeoLocSimple implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
-        Toast.makeText(context, "onLocationChanged: (" + location.getLatitude() + ", " + location.getLongitude() + ")", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "GeoLocSimple.onLocationChanged: (" + location.getLatitude() + ", " + location.getLongitude() + ")", Toast.LENGTH_LONG).show();
     }
 
     @Override
