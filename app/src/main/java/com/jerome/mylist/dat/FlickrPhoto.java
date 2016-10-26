@@ -1,5 +1,6 @@
 package com.jerome.mylist.dat;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.jerome.mylist.mod.FlickrPhotoType;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -23,9 +24,9 @@ public class FlickrPhoto extends BaseModel implements Serializable {
     @Column
     String search;
     @Column
-    long lat;
+    double lat;
     @Column
-    long lon;
+    double lon;
     @Column
     @PrimaryKey(autoincrement = true)
     private long id;
@@ -36,8 +37,8 @@ public class FlickrPhoto extends BaseModel implements Serializable {
         type = FlickrPhotoType.DEFAULT;
         count = 0;
         search = "";
-        lat = Long.MAX_VALUE;
-        lon = Long.MAX_VALUE;
+        lat = Double.MAX_VALUE;
+        lon = Double.MAX_VALUE;
     }
 
     public FlickrPhoto(String title, String url) {
@@ -50,6 +51,15 @@ public class FlickrPhoto extends BaseModel implements Serializable {
         this.type = FlickrPhotoType.HISTORY;
         this.count = 0;
         this.search = search;
+        lat = Double.MAX_VALUE;
+        lon = Double.MAX_VALUE;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        if (latLng != null && lat == Double.MAX_VALUE && lon == Double.MAX_VALUE) {
+            lat = latLng.latitude;
+            lon = latLng.longitude;
+        }
     }
 
     public void seen() {
@@ -61,6 +71,12 @@ public class FlickrPhoto extends BaseModel implements Serializable {
         return "FlickrPhoto{" +
                 "title='" + title + '\'' +
                 ", url='" + url + '\'' +
+                ", type=" + type +
+                ", count=" + count +
+                ", search='" + search + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", id=" + id +
                 '}';
     }
 
@@ -112,19 +128,19 @@ public class FlickrPhoto extends BaseModel implements Serializable {
         this.search = search;
     }
 
-    public long getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(long lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public long getLon() {
+    public double getLon() {
         return lon;
     }
 
-    public void setLon(long lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 
