@@ -28,7 +28,20 @@ public class MyPhotos {
         }
     }
 
+    public FlickrPhoto get(FlickrPhoto photo) {
+        List<FlickrPhoto> testExists = flickrPhotoPersistenceManager.getFlickrPhotoByUrl(photo.getUrl());
+        if (testExists.size() == 0) {
+            // TODO get LatLon
+            photo.setLat((long) (Math.random() * 10));
+            photo.setLon((long) (Math.random() * 10));
+            return photo;
+        } else {
+            return testExists.get(0);
+        }
+    }
+
     public FlickrPhoto seen(FlickrPhoto photo) {
+        photo = get(photo);
         photo.seen();
         save(photo);
         return photo;
