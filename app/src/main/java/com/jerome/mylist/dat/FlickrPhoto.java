@@ -36,8 +36,8 @@ public class FlickrPhoto extends BaseModel implements Serializable {
         type = FlickrPhotoType.DEFAULT;
         count = 0;
         search = "";
-        lat = 0;
-        lon = 0;
+        lat = Long.MAX_VALUE;
+        lon = Long.MAX_VALUE;
     }
 
     public FlickrPhoto(String title, String url) {
