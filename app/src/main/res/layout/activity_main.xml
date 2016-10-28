@@ -5,10 +5,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/test_answers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Trigger Key Metric" />
+
     <fragment
         android:id="@+id/fragmentList"
         android:name="com.jerome.mylist.ui.ListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </LinearLayout>

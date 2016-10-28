@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.google.android.gms.maps.model.LatLng;
 import com.jerome.mylist.R;
 import com.jerome.mylist.biz.BoundService;
@@ -182,18 +184,42 @@ public class ListFragment extends Fragment implements View.OnClickListener, OnRe
                 if (position == 0) {
                     historyView.setVisibility(View.GONE);
                     searchBlock.setVisibility(View.VISIBLE);
+                    // TODO: Use your own attributes to track content views in your app
+                    Answers.getInstance().logContentView(new ContentViewEvent()
+                            .putContentName("MTBS")
+                            .putContentType("Search")
+                            .putContentId("1")
+                            .putCustomAttribute("MyAttribute", "MyValue1"));
                 } else if (position == 1) {
                     myHistoryAdapter.setList(myPhotos.getHistory());
                     searchBlock.setVisibility(View.GONE);
                     historyView.setVisibility(View.VISIBLE);
+                    // TODO: Use your own attributes to track content views in your app
+                    Answers.getInstance().logContentView(new ContentViewEvent()
+                            .putContentName("MTBS")
+                            .putContentType("History")
+                            .putContentId("2")
+                            .putCustomAttribute("MyAttribute", "MyValue2"));
                 } else if (position == 2) {
                     historyView.setVisibility(View.GONE);
                     searchBlock.setVisibility(View.GONE);
+                    // TODO: Use your own attributes to track content views in your app
+                    Answers.getInstance().logContentView(new ContentViewEvent()
+                            .putContentName("MTBS")
+                            .putContentType("Favorites")
+                            .putContentId("3")
+                            .putCustomAttribute("MyAttribute", "MyValue3"));
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), MapsActivity.class);
                     startActivity(intent);
                     mstButton.setValue(0);
+                    // TODO: Use your own attributes to track content views in your app
+                    Answers.getInstance().logContentView(new ContentViewEvent()
+                            .putContentName("MTBS")
+                            .putContentType("Map")
+                            .putContentId("4")
+                            .putCustomAttribute("MyAttribute", "MyValue4"));
                 }
             }
         });
