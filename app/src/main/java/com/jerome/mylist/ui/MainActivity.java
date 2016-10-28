@@ -12,12 +12,14 @@ import com.jerome.mylist.R;
 import com.jerome.mylist.biz.GeoLocSimple;
 import com.jerome.mylist.dat.FlickrPhoto;
 
+import hugo.weaving.DebugLog;
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements ListFragment.ItemClicked, View.OnClickListener {
     GeoLocSimple geoLocSimple;
 
     @Override
+    @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
