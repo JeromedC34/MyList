@@ -53,3 +53,4 @@ captures/
 
 # Mine
 app/src/main/res/values/strings_privates.xml
+app/fabric.properties
